@@ -4,11 +4,16 @@ import {Post} from './Post/Post';
 
 export const MyPosts = () => {
     return (
-        <div>
-            My Posts
+        <div className={s.postsBlock}>
+            <h3>My Posts</h3>
             <div>
-                <textarea name="FreeText" id="1"></textarea>
-                <button>Add post</button>
+                <div>
+                    <textarea name="FreeText" id="1"></textarea>
+                </div>
+                <div>
+                    <button>Add post</button>
+                </div>
+
             </div>
             <div className={s.posts}>
                 <Post massage={'Hi'}/>
