@@ -3,6 +3,12 @@ import s from './MyPosts.module.css'
 import {Post} from './Post/Post';
 
 export const MyPosts = () => {
+
+    let posts = [
+        {id:1, message:'Hi, how a u?'},
+        {id:2, message:"It's my first post"}
+    ]
+    let postsElement = posts.map(p => <Post massage={p.message}/>)
     return (
         <div className={s.postsBlock}>
             <h3>My Posts</h3>
@@ -16,8 +22,7 @@ export const MyPosts = () => {
 
             </div>
             <div className={s.posts}>
-                <Post massage={'Hi'}/>
-                <Post message={'Ohh'}/>
+                {postsElement}
             </div>
         </div>
     )
