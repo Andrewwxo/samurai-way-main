@@ -8,18 +8,22 @@ type PostsType ={
 }
 type ProfilePageType ={
     posts:Array<PostsType>
-    addPost:()=>void
+    addPost:(message:string)=>void
 }
 
 export const MyPosts: React.FC<ProfilePageType> = ({posts, addPost}) => {
 
-    const newPostElement = React.createRef ()
+    const newPostElement = React.createRef<HTMLTextAreaElement> ()
 
     let postsElement = posts.map(p => <Post massage={p.message}/>)
 
-    const addPostS=()=>{
-        const text = newPostElement.current.value;
-        addPost(text)
+    const addPosts=()=>{
+        if (newPostElement.current){
+            addPost(newPostElement.current?.value)
+            newPostElement.current.value= ''
+        }
+        // const text = newPostElement.current?.value;
+        // addPosts(text)
     }
 
     return (
@@ -30,7 +34,7 @@ export const MyPosts: React.FC<ProfilePageType> = ({posts, addPost}) => {
                     <textarea name="FreeText" id="1" ref={newPostElement}></textarea>
                 </div>
                 <div>
-                    <button onClick={addPost}>Add post</button>
+                    <button onClick={addPosts}>Add post</button>
                 </div>
 
             </div>

@@ -1,37 +1,40 @@
 import React from 'react';
+import {renderTree} from '../render';
 
-type PostsType ={
+export type PostsType ={
     id:number
-    message:string
+    message:any
 }
-type ProfilePageType ={
+export type ProfilePageType ={
+    messageForNewPost: string
     posts:Array<PostsType>
 }
 
-type DialogPageType ={
+export type DialogPageType ={
     dialogs:Array<DialogsType>
     messages:Array<MessageType>
 }
 
-type DialogsType ={
+export type DialogsType ={
     id:number
     name:string
 }
 
-type MessageType ={
+export type MessageType ={
     id:number
     message:string
 }
-type SidebarType = {}
+export type SidebarType = {}
 
-type RootStateType={
+export type RootStateType={
     profilePage: ProfilePageType
     dialogsPage: DialogPageType
     sidebar: SidebarType
 }
 
-export let state: RootStateType = {
+export const state: RootStateType = {
     profilePage:{
+        messageForNewPost: "",
         posts : [
             {id: 1, message: 'Hi, how a u?'},
             {id: 2, message: 'It\'s my first post'}
@@ -51,10 +54,18 @@ export let state: RootStateType = {
     sidebar:{},
 }
 
-export const addPost=(PostMessage)=>{
-    let newList = {
-        id:4,
+export const addPost=(PostMessage:string)=>{
+    const newList: PostsType = {
+        id: new Date().getTime(),
         message: postMessage,
     }
-    state.profilePage.posts.push()
+    state.profilePage.posts.push(newList)
+    // state.profilePage.posts
+    renderTree(state)
+}
+
+export const changeNewText = (newText:string) => {
+    state.profilePage.messageForNewPost = newText
+    renderTree(state)
+
 }
