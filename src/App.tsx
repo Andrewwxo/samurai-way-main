@@ -5,7 +5,8 @@ import {Navbar} from './components/Navbar/Navbar';
 import {Profile} from './components/Profile/Profile';
 import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
-import {addPost, changeNewText, PostsType, RootStateType, state} from './redux/state';
+import {PostsType, RootStateType, StoreType} from './redux/state';
+
 
 type MessageType = {
     // id: number
@@ -45,14 +46,20 @@ let ComponentDialogs = (props: appProps) => {
     <Dialogs
         dialogs={props.state.dialogsPage.dialogs}
         messages={props.state.dialogsPage.messages}
-        posts={state.profilePage.posts}
+        // posts={state.profilePage.posts}
     />
 }
 let ComponentProfile = (props: appProps) => {
     <Profile posts={props.state.profilePage.posts} addPost={props.addPost}/>
 }
 
-export const App = () => {
+type PropsType = {
+    store: StoreType
+}
+
+export const App: React.FC<PropsType> = (props) => {
+    const state = props.store.getState()
+
     return (
         <BrowserRouter>
             <div className="app-wrapper">
@@ -62,13 +69,13 @@ export const App = () => {
                     {/*<Route path='/dialogs' component={ComponentDialogs}/>*/}
                     {/*<Route path='/profile' component={ComponentProfile}/>*/}
 
-                    <Route path="/dialogs" render={ComponentDialogs}/>
-                    <Route path="/profile" render={ComponentProfile}/>
-                    <Route path={'/hello'} render={()=> <HelloMessage
+                    <Route path="/dialogs" element={ComponentDialogs}/>
+                    <Route path="/profile" element={ComponentProfile}/>
+                    <Route path={'/hello'} element={()=> <HelloMessage
                         posts={state.profilePage.posts}
                         message={state.profilePage.messageForNewPost}
-                        addPostCallback={addPost}
-                        changeNewTextCallback={changeNewText}
+                        addPostCallback={props.store.addPost.bind(props.store)}
+                        changeNewTextCallback={props.store.changeNewText.bind(props.store)}
             />}/>
                 </div>
             </div>
