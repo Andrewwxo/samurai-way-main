@@ -2,6 +2,7 @@ import React from 'react';
 import s from './Profile.module.css'
 import {MyPosts} from './MyPosts/MyPosts';
 import {ProfileInfo} from './ProfileInfo/ProfileInfo';
+import {ActionTypes} from '../../redux/profile-reducer';
 
 type PostsType ={
     id:number
@@ -10,16 +11,17 @@ type PostsType ={
 
 type ProfilePropsType={
     posts:Array<PostsType>
-    addPost:()=>void
+    dispatch: (action: ActionTypes) => void
+    newPostText: string
 }
 
 
+export const Profile: React.FC<ProfilePropsType> = ({posts, dispatch, newPostText}) => {
 
-export const Profile = (props:ProfilePropsType) => {
     return (<div>
             <ProfileInfo/>
-            <MyPosts posts={props.posts} addPost={props.addPost}/>
+            <MyPosts posts={posts} dispatch={dispatch} newPostText ={newPostText}/>
         </div>
     )
 
-}
+};

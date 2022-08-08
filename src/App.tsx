@@ -4,8 +4,9 @@ import {Header} from './components/Header/Header';
 import {Navbar} from './components/Navbar/Navbar';
 import {Profile} from './components/Profile/Profile';
 import {Dialogs} from './components/Dialogs/Dialogs';
-import {BrowserRouter, Route} from 'react-router-dom';
-import {PostsType, RootStateType, StoreType} from './redux/state';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {PostsType, RootStateType, store, StoreType} from './redux/store';
+import {ActionTypes, addPostAC} from './redux/profile-reducer';
 
 
 type MessageType = {
@@ -14,50 +15,20 @@ type MessageType = {
     message: string
     addPostCallback: (postText: string) => void
     changeNewTextCallback: (newText: string) => void
+    dispatch?: (action: ActionTypes) => void
 }
 
 type appProps = {
     state: RootStateType
-    posts:Array<PostsType>
+    posts: Array<PostsType>
     addPost: () => void
 }
 
-function HelloMessage(props: MessageType) {
-    const postMessageRef = React.createRef<HTMLTextAreaElement>();
-    const addPost = ()=>{
-        if (postMessageRef.current) {
-            props.addPostCallback(postMessageRef.current.value)
-        }
-    }
-    const newTextChangeHandler = (e:ChangeEvent<HTMLTextAreaElement>)=>{props.changeNewTextCallback(e.currentTarget.value)}
-    return <div>
-        {props.message}
-        <hr/>
-        {props.posts.map(p => <div key={p.id}><b>{props.message}</b></div>)}
-        <hr/>
-        <textarea value={props.message}
-                  onChange={newTextChangeHandler}
-        ></textarea>
-        <button onClick={addPost}>add post</button>
-    </div>
-}
-
-let ComponentDialogs = (props: appProps) => {
-    <Dialogs
-        dialogs={props.state.dialogsPage.dialogs}
-        messages={props.state.dialogsPage.messages}
-        // posts={state.profilePage.posts}
-    />
-}
-let ComponentProfile = (props: appProps) => {
-    <Profile posts={props.state.profilePage.posts} addPost={props.addPost}/>
-}
-
-type PropsType = {
+export type AppPropsType = {
     store: StoreType
 }
 
-export const App: React.FC<PropsType> = (props) => {
+export const App: React.FC<AppPropsType> = (props) => {
     const state = props.store.getState()
 
     return (
@@ -66,22 +37,21 @@ export const App: React.FC<PropsType> = (props) => {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    {/*<Route path='/dialogs' component={ComponentDialogs}/>*/}
-                    {/*<Route path='/profile' component={ComponentProfile}/>*/}
+                    <Routes> <Route path="/dialogs" element={<Dialogs store={props.store}/>}/>
+                        <Route path="/profile"
+                               element={<Profile posts={state.profilePage.posts}
+                                                 dispatch={props.store.dispatch}
+                                                 newPostText={state.profilePage.messageForNewPost}/>}/>
+                    </Routes>
 
-                    <Route path="/dialogs" element={ComponentDialogs}/>
-                    <Route path="/profile" element={ComponentProfile}/>
-                    <Route path={'/hello'} element={()=> <HelloMessage
-                        posts={state.profilePage.posts}
-                        message={state.profilePage.messageForNewPost}
-                        addPostCallback={props.store.addPost.bind(props.store)}
-                        changeNewTextCallback={props.store.changeNewText.bind(props.store)}
-            />}/>
                 </div>
+
+
             </div>
         </BrowserRouter>
 
-    );
+    )
+        ;
 }
 
 // className =

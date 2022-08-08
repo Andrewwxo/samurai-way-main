@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
+import {ActionTypes, profileReducer} from './profile-reducer';
+import {ActionTypesDialogs, dialogsReducer} from './dialogs-reducer';
+import {sidebarReducer} from './sidebar-reducer';
 
 
 export type PostsType = {
     id: number
     message: any
 }
+
 export type ProfilePageType = {
     messageForNewPost: string
     posts: Array<PostsType>
@@ -13,6 +17,7 @@ export type ProfilePageType = {
 export type DialogPageType = {
     dialogs: Array<DialogsType>
     messages: Array<MessageType>
+    newMessageBody: string
 }
 
 export type DialogsType = {
@@ -34,13 +39,16 @@ export type RootStateType = {
 
 export type StoreType = {
     _state: RootStateType
-    changeNewText: (newText:string)=> void
-    addPost:(PostMessage: string) =>void
-    _onChange:() =>void
-    subscriber:(callback:() =>void) => void
-    getState:()=>RootStateType
+    changeNewText: (newText: string) => void
+    addPost: (PostMessage: string) => void
+    _onChange: () => void
+    subscriber: (callback: () => void) => void
+    getState: () => RootStateType
+    dispatch: (action: RootActions) => void
+    _callSubscriber: (state:RootStateType)=>void
 }
 
+export type RootActions = ActionTypes | ActionTypesDialogs
 export const store: StoreType = {
     _state: {
         profilePage: {
@@ -59,14 +67,21 @@ export const store: StoreType = {
                 {id: 1, message: 'Hi'},
                 {id: 2, message: 'How a u?'},
                 {id: 3, message: 'Fine'}
-            ]
+            ],
+            newMessageBody: '',
         },
         sidebar: {},
     },
+
     changeNewText(newText: string) {
         this._state.profilePage.messageForNewPost = newText
         this._onChange()
     },
+
+    _callSubscriber(state) {
+
+    },
+
     addPost(PostMessage: string) {
         const newList: PostsType = {
             id: new Date().getTime(),
@@ -82,8 +97,14 @@ export const store: StoreType = {
     subscriber(callback) {
         this._onChange = callback
     },
-    getState(){
+    getState() {
         return this._state;
-    }
+    },
 
+    dispatch(action) {
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+        this._callSubscriber(this._state)
+    }
 }
