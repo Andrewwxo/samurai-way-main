@@ -7,6 +7,8 @@ import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {PostsType, RootStateType, store, StoreType} from './redux/store';
 import {ActionTypes, addPostAC} from './redux/profile-reducer';
+import {Store} from 'redux';
+import {DialogsContainer} from './components/Dialogs/DialogsContainer';
 
 
 type MessageType = {
@@ -25,7 +27,7 @@ type appProps = {
 }
 
 export type AppPropsType = {
-    store: StoreType
+    store: Store
 }
 
 export const App: React.FC<AppPropsType> = (props) => {
@@ -37,11 +39,9 @@ export const App: React.FC<AppPropsType> = (props) => {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Routes> <Route path="/dialogs" element={<Dialogs store={props.store}/>}/>
+                    <Routes> <Route path="/dialogs" element={<DialogsContainer store={props.store}/>}/>
                         <Route path="/profile"
-                               element={<Profile posts={state.profilePage.posts}
-                                                 dispatch={props.store.dispatch}
-                                                 newPostText={state.profilePage.messageForNewPost}/>}/>
+                               element={<Profile store={props.store}/>}/>
                     </Routes>
 
                 </div>

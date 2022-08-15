@@ -15,7 +15,20 @@ export const changeNewTextAC = (newText: string) => {
     } as const
 }
 
-export const profileReducer = (state: ProfilePageType, action: RootActions) => {
+export type PostType = {
+    id: number
+    message: string
+}
+
+let initialState = {
+    messageForNewPost: '',
+    posts: [
+        {id: 1, message: 'Hi, how a u?'},
+        {id: 2, message: 'It\'s my first post'}
+    ]
+}
+
+export const profileReducer = (state: ProfilePageType = initialState, action: RootActions): ProfilePageType => {
     switch (action.type) {
         case 'ADD-POST':
             const newList: PostsType = {
