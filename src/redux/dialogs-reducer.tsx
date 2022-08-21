@@ -20,36 +20,37 @@ type MessageType = {
     id: number
     message: string
 }
-export type DialogPageType = {
-    dialogs: Array<DialogsType>
-    messages: Array<MessageType>
-    newMessageBody: string
-}
 
-let initialState = {
+export let initialState = {
     dialogs: [
         {id: 1, name: 'John'},
         {id: 2, name: 'Andrew'}
-    ],
+    ] as Array<DialogsType>,
     messages: [
         {id: 1, message: 'Hi'},
         {id: 2, message: 'How a u?'},
         {id: 3, message: 'Fine'}
-    ],
+    ] as Array<MessageType>,
     newMessageBody: '',
 }
+export type InitialStateType = typeof initialState
 
-export const dialogsReducer = (state: DialogPageType = initialState, action: RootActions): DialogPageType => {
+export const dialogsReducer = (state:InitialStateType = initialState, action: ActionTypesDialogs):InitialStateType => {
+
     switch (action.type) {
         case 'UPDATE-NEW-MESSAGE-BODY':
-            state.newMessageBody = action.newMessageBody
-            return state;
+            return  {
+                ...state, newMessageBody: action.newMessageBody
+            }
+            ;
 
         case 'SEND-MESSAGE':
             let body = state.newMessageBody
-            state.newMessageBody = ''
-            state.messages.push({id: 6, message: body})
-            return state
+            return  {
+                ...state,
+                newMessageBody: '',
+                messages: [...state.messages, {id: 6, message: body} ]
+            };
         default:
             return state
     }

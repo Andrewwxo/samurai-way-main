@@ -1,37 +1,15 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import './App.css';
 import {Header} from './components/Header/Header';
 import {Navbar} from './components/Navbar/Navbar';
 import {Profile} from './components/Profile/Profile';
-import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {PostsType, RootStateType, store, StoreType} from './redux/store';
-import {ActionTypes, addPostAC} from './redux/profile-reducer';
-import {Store} from 'redux';
-import {DialogsContainer} from './components/Dialogs/DialogsContainer';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
+import UsersContainer from './components/Users/UsersContainer';
 
 
-type MessageType = {
-    // id: number
-    posts: Array<PostsType>
-    message: string
-    addPostCallback: (postText: string) => void
-    changeNewTextCallback: (newText: string) => void
-    dispatch?: (action: ActionTypes) => void
-}
-
-type appProps = {
-    state: RootStateType
-    posts: Array<PostsType>
-    addPost: () => void
-}
-
-export type AppPropsType = {
-    store: Store
-}
-
-export const App: React.FC<AppPropsType> = (props) => {
-    const state = props.store.getState()
+export const App = () => {
+    // const state = props.store.getState()
 
     return (
         <BrowserRouter>
@@ -39,14 +17,15 @@ export const App: React.FC<AppPropsType> = (props) => {
                 <Header/>
                 <Navbar/>
                 <div className="app-wrapper-content">
-                    <Routes> <Route path="/dialogs" element={<DialogsContainer store={props.store}/>}/>
+                    <Routes>
+                        <Route path="/dialogs" element={<DialogsContainer/>}/>
                         <Route path="/profile"
-                               element={<Profile store={props.store}/>}/>
+                               element={<Profile/>}/>
+                        <Route path="/users"
+                               element={UsersContainer}/>
+
                     </Routes>
-
                 </div>
-
-
             </div>
         </BrowserRouter>
 
