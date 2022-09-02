@@ -9,7 +9,6 @@ import UsersContainer from './components/Users/UsersContainer';
 
 
 export const App = () => {
-    // const state = props.store.getState()
 
     return (
         <BrowserRouter>
@@ -22,7 +21,7 @@ export const App = () => {
                         <Route path="/profile"
                                element={<Profile/>}/>
                         <Route path="/users"
-                               element={UsersContainer}/>
+                               element={<UsersContainer />}/>
 
                     </Routes>
                 </div>
