@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-    initialState,
     InitialStateType,
-    sendMessageAC,
-    updateNewMessageBodyAC
+    sendMessage,
+    updateNewMessageBody
 } from '../../redux/dialogs-reducer';
 import {compose, Dispatch, Store} from 'redux';
 import {AppStateType} from '../../redux/redax-store';
@@ -25,13 +24,13 @@ let mapStateToProps = (state:AppStateType): MapStateToPropsType=> {
         dialogsPage: state.dialogsPage
     }}
 
-let mapDispatchToProps = (dispatch: Dispatch): MapDispatchToProps => {
-    return {
-        updateNewMessageBody: (body:string)=> {updateNewMessageBodyAC(body)},
-        sendMessage: ()=>{dispatch(sendMessageAC(initialState.newMessageBody))},
-    }
-}
+// let mapDispatchToProps = (dispatch: Dispatch): MapDispatchToProps => {
+//     return {
+//         updateNewMessageBody: (body:string)=> {updateNewMessageBody(body)},
+//         sendMessage: ()=>{dispatch(sendMessage(initialState.newMessageBody))},
+//     }
+// }
 
 export default compose<React.FC>(
-    connect (mapStateToProps, mapDispatchToProps)
+    connect (mapStateToProps, {updateNewMessageBody,sendMessage })
 )(Dialogs)

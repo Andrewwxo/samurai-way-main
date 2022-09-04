@@ -2,13 +2,13 @@ import React from 'react';
 import {RootActions} from './store';
 
 
-export type ActionTypesDialogs = ReturnType<typeof updateNewMessageBodyAC> | ReturnType<typeof sendMessageAC>;
+export type ActionTypesDialogs = ReturnType<typeof updateNewMessageBody> | ReturnType<typeof sendMessage>;
 
-export const updateNewMessageBodyAC = (newMessageBody: string) => {
+export const updateNewMessageBody = (newMessageBody: string) => {
     return {type: 'UPDATE-NEW-MESSAGE-BODY', newMessageBody: newMessageBody} as const
 }
 
-export const sendMessageAC = (message: string) => {
+export const sendMessage = (message: string) => {
     return {type: 'SEND-MESSAGE', message: message} as const
 }
 
