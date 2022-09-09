@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './users.module.css';
 import userPhoto from '../../assets/images/user.png'
 import {UserType} from '../../redux/users-reducer';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
+import axios from 'axios';
 
 type UsersPopsType = {
     totalUserCount: number
@@ -46,10 +47,32 @@ export let Users = (props: UsersPopsType) => {
                 <div>
                     {u.followed
                         ? <button onClick={() => {
-                            props.unfollow(u.id)
+                            axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
+                                withCredentials: true,
+                                headers: {
+                                    'API-KEY': '9e783027-f4c8-4865-9f3f-637d2acc2128'
+                                }
+                            })
+                                .then(response => {
+                                    if (response.data.resultCode == 0) {
+                                        props.unfollow(u.id)
+                                    }
+                                })
+
                         }}>Unfollow</button>
                         : <button onClick={() => {
-                            props.follow(u.id)
+                            axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
+                                withCredentials: true,
+                                headers: {
+                                    'API-KEY': '9e783027-f4c8-4865-9f3f-637d2acc2128'
+                                }
+                            })
+                                .then(response => {
+                                    if (response.data.resultCode == 0) {
+                                        props.follow(u.id)
+                                    }
+                                })
+
                         }}>Follow</button>}
                 </div>
             </span>
