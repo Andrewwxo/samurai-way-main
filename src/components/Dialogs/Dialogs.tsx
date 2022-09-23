@@ -3,6 +3,7 @@ import s from './Dialogs.module.css'
 import {DialogItem} from './DialogsItem/DialogsItem';
 import {Message} from './Message/Message';
 import {DialogsPropsType} from './DialogsContainer';
+import {Redirect} from 'react-router-dom';
 
 export const Dialogs: FC<DialogsPropsType> = (props) => {
     const dialogsPageState = props.dialogsPage

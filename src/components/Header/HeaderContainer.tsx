@@ -1,14 +1,10 @@
 import React from 'react';
-
 import {Header} from './Header';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
-import axios from 'axios';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {setUserProfile} from '../../redux/profile-reducer';
-import {setAuthUserData} from '../../redux/auth-reducer';
+import {getAuthUserData} from '../../redux/auth-reducer';
 import {AppStateType} from '../../redux/redax-store';
-import {ProfileType} from '../Profile/ProfileContainer';
 
 type PathParamsType = {
     userId: string,
@@ -20,6 +16,7 @@ type HeaderContainerPropsType = {
     login: string,
     isAuth: boolean
     setAuthUserData: (id: number, email: string, login: string) => void
+    getAuthUserData:()=>void
 }
 
 type PropsType = RouteComponentProps<PathParamsType> & HeaderContainerPropsType
@@ -27,13 +24,7 @@ type PropsType = RouteComponentProps<PathParamsType> & HeaderContainerPropsType
 class HeaderContainer extends React.Component<PropsType> {
 
     componentDidMount() {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`, {withCredentials: true})
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    let {id, login, email} = response.data.data
-                    this.props.setAuthUserData(id,email,login)
-                }
-            })
+       this.props.getAuthUserData()
     }
 
     render() {
@@ -48,6 +39,6 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
 })
 
 export default compose<React.FC>(
-    connect(mapStateToProps, {setAuthUserData}),
+    connect(mapStateToProps, {getAuthUserData}),
     withRouter
 )(HeaderContainer)

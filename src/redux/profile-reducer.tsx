@@ -1,4 +1,6 @@
 import {ProfileType} from '../components/Profile/ProfileContainer';
+import {Dispatch} from 'redux';
+import {usersAPI} from '../api/api';
 
 export type ActionTypes = ReturnType<typeof addPost> |
     ReturnType<typeof changeNewTextAC> |
@@ -16,11 +18,16 @@ export const changeNewTextAC = (newText: string) => {
         newText,
     } as const
 }
-export const setUserProfile = (profile: any) => {
+export const setUserProfile = (profile: ProfileType) => {
     return {
         type: 'SET-USER-PROFILE',
         profile,
     } as const
+}
+export const getUserProfile = (userID: string) => (dispatch: Dispatch) => {
+    usersAPI.getProfile(userID).then(response => {
+            dispatch(setUserProfile(response.data))
+        })
 }
 
 export type PostType = {
