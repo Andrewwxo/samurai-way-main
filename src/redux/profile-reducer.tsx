@@ -1,10 +1,11 @@
 import {ProfileType} from '../components/Profile/ProfileContainer';
 import {Dispatch} from 'redux';
-import {usersAPI} from '../api/api';
+import {profileAPI, usersAPI} from '../api/api';
 
 export type ActionTypes = ReturnType<typeof addPost> |
     ReturnType<typeof changeNewTextAC> |
-    ReturnType<typeof setUserProfile>
+    ReturnType<typeof setUserProfile> |
+    ReturnType<typeof setStatus>
 
 export const addPost = (postMessage: string) => {
     return {
@@ -24,10 +25,28 @@ export const setUserProfile = (profile: ProfileType) => {
         profile,
     } as const
 }
+export const setStatus = (status: string) => {
+    return {
+        type: 'SET-STATUS',
+        status,
+    } as const
+}
 export const getUserProfile = (userID: string) => (dispatch: Dispatch) => {
     usersAPI.getProfile(userID).then(response => {
-            dispatch(setUserProfile(response.data))
-        })
+        dispatch(setUserProfile(response.data))
+    })
+}
+export const getStatus = (userID: string) => (dispatch: Dispatch) => {
+    profileAPI.getStatus(userID).then(response => {
+        dispatch(setStatus(response.data))
+    })
+}
+export const updateStatus = (status: string) => (dispatch: Dispatch) => {
+    profileAPI.updateStatus(status).then(response => {
+        if (response.data.resultCode === 0) {
+            dispatch(setStatus(status))
+        }
+    })
 }
 
 export type PostType = {
@@ -44,6 +63,7 @@ let initialState = {
         {id: 2, message: 'It\'s my first post'}
     ] as PostType[],
     profile: null as null | ProfileType,
+    status: '',
 }
 
 
@@ -68,6 +88,11 @@ export const profileReducer = (state: InitialStateType = initialState, action: A
             return {
                 ...state,
                 profile: action.profile
+            }
+        case 'SET-STATUS':
+            return {
+                ...state,
+                status: action.status
             }
         default:
             return state

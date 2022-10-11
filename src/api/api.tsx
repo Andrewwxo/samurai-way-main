@@ -24,8 +24,21 @@ export const usersAPI = {
         return instance.delete(`follow/${userID}`)
     },
     getProfile(userID:string): Promise<AxiosResponse>{
-        return  instance.get(`profile/` + userID)
+        return  profileAPI.getProfile(userID)
     }
+}
+
+export const profileAPI = {
+    getProfile(userID:string): Promise<AxiosResponse>{
+        return  instance.get(`profile/` + userID)
+    },
+    getStatus(userID:string): Promise<AxiosResponse>{
+        return instance.get(`profile/status` + userID)
+    },
+    updateStatus(status:string): Promise<AxiosResponse>{
+        return instance.put(`profile/status` + {status:status})
+    },
+
 }
 export const authAPI = {
    me(){
